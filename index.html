@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do & Gantt Chart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: 'var(--primary-color, #4f46e5)', // Indigo-600
+            secondary: 'var(--secondary-color, #10b981)', // Emerald-500
+            accent: 'var(--accent-color, #ec4899)', // Pink-500
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif; /* A nice sans-serif font often used with Tailwind */
+    }
+    /* Recharts specific styles can be tricky with pure Tailwind. Adding minimal global styles for Recharts text if needed. */
+    .recharts-cartesian-axis-tick-value tspan {
+      font-size: 0.8rem;
+    }
+    .recharts-tooltip-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .recharts-tooltip-item {
+      color: #555;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "recharts/": "https://esm.sh/recharts@^3.0.0/",
+    "recharts": "https://esm.sh/recharts@^3.0.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-900 text-slate-100">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

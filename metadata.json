@@ -1,0 +1,5 @@
+
+{
+  "name": "Interactive To-Do & Gantt Chart",
+  "description": "A web application to manage tasks in a to-do list format and visualize them as a Gantt chart. Data is saved locally in the browser."
+}
