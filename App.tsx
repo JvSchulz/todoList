@@ -9,10 +9,9 @@ import GanttChartView from './components/GanttChartView';
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ToDoItem[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.LIST);
-  const [isClient, setIsClient] = useState(false);
 
+  // Load todos from localStorage on initial mount
   useEffect(() => {
-    setIsClient(true); // Ensures localStorage is accessed only on client-side
     try {
       const storedTodos = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (storedTodos) {
@@ -20,18 +19,19 @@ const App: React.FC = () => {
       }
     } catch (error) {
       console.error("Failed to load todos from localStorage:", error);
+      // Optionally set to empty array or handle error state
+      setTodos([]);
     }
   }, []);
 
+  // Save todos to localStorage whenever they change
   useEffect(() => {
-    if (isClient) { // Ensure this runs only client-side after initial mount
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-      } catch (error) {
-        console.error("Failed to save todos to localStorage:", error);
-      }
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+    } catch (error) { // Added curly braces here
+      console.error("Failed to save todos to localStorage:", error);
     }
-  }, [todos, isClient]);
+  }, [todos]);
 
   const handleAddTodo = useCallback((task: string, startDate: string, endDate: string) => {
     if (!task.trim() || !startDate || !endDate) {
@@ -81,6 +81,7 @@ const App: React.FC = () => {
             onClick={() => setViewMode(ViewMode.LIST)}
             className={`px-4 py-2 rounded-md flex items-center space-x-2 transition-all duration-200 ease-in-out
                         ${viewMode === ViewMode.LIST ? 'bg-indigo-600 text-white shadow-lg transform scale-105' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}`}
+            aria-pressed={viewMode === ViewMode.LIST}
           >
             <ListIcon />
             <span>List View</span>
@@ -89,24 +90,21 @@ const App: React.FC = () => {
             onClick={() => setViewMode(ViewMode.GANTT)}
             className={`px-4 py-2 rounded-md flex items-center space-x-2 transition-all duration-200 ease-in-out
                         ${viewMode === ViewMode.GANTT ? 'bg-indigo-600 text-white shadow-lg transform scale-105' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}`}
+            aria-pressed={viewMode === ViewMode.GANTT}
           >
             <GanttIcon />
             <span>Gantt View</span>
           </button>
         </div>
         
-        {isClient ? ( // Only render views client-side to ensure Recharts and localStorage behave as expected
-          viewMode === ViewMode.LIST ? (
-            <TodoListView
-              todos={todos}
-              onToggleComplete={handleToggleComplete}
-              onDeleteTodo={handleDeleteTodo}
-            />
-          ) : (
-            <GanttChartView todos={todos} />
-          )
+        {viewMode === ViewMode.LIST ? (
+          <TodoListView
+            todos={todos}
+            onToggleComplete={handleToggleComplete}
+            onDeleteTodo={handleDeleteTodo}
+          />
         ) : (
-          <div className="text-center py-10 text-slate-400">Loading tasks...</div>
+          <GanttChartView todos={todos} />
         )}
       </div>
       <footer className="text-center mt-12 text-sm text-slate-500">
