@@ -38,13 +38,17 @@ const GanttChartView: React.FC<{ todos: ToDoItem[] }> = ({ todos }) => {
   }
   
   const CustomTooltip: React.FC<TooltipProps<ValueType, NameType>> = ({ active, payload }) => {
-    if (active && payload && payload.length) {
+    // Ensure 'active' is true, 'payload' array exists, and has at least two items
+    // because comments indicate interest in payload[1] (the second entry).
+    if (active && payload && payload.length > 1) {
       // payload is an array of TooltipPayload objects.
       // We are interested in the 'payload' property of the second entry (payload[1]), 
       // which corresponds to the 'duration' bar's data.
-      const activePayloadEntry = payload[1]; 
+      const activePayloadEntry = payload[1]; // This is TooltipPayload<ValueType, NameType>
 
-      // Check if the entry itself and its 'payload' property (the actual data) exist.
+      // Check if this activePayloadEntry (TooltipPayload object) exists and 
+      // if its 'payload' property (the actual data item) is defined.
+      // The inner 'payload' is optional on the TooltipPayload type.
       if (activePayloadEntry && typeof activePayloadEntry.payload !== 'undefined') {
         const data = activePayloadEntry.payload as GanttChartDataItem;
         return (

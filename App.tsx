@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ToDoItem, ViewMode } from './types';
 import { LOCAL_STORAGE_KEY, ListIcon, GanttIcon } from './constants';
-import TodoForm from './components/TodoForm';
-import TodoListView from './components/TodoListView';
-import GanttChartView from './components/GanttChartView';
+import TodoForm from './components/TodoForm.tsx';
+import TodoListView from './components/TodoListView.tsx';
+import GanttChartView from './components/GanttChartView.tsx';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ToDoItem[]>([]);
